@@ -6,7 +6,9 @@ import com.premit.order_services.repository.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrdersServiceImpl implements OrdersService{
@@ -33,6 +35,27 @@ public class OrdersServiceImpl implements OrdersService{
             } else {
                 return "order creation failed.";
             }
+        }
+    }
+
+    @Override
+    public List<OrdersDTO> getOrdersByStatusAndEmail(String orderStatus, String emailId) {
+        List<OrdersDTO> ordersDtoList = null;
+        Optional<List<OrdersEntity>> optionalOrdersEntityList = ordersRepository.findByOrderStatusAndEmailId(orderStatus,emailId);
+        if(optionalOrdersEntityList.isPresent()) {
+            List<OrdersEntity> ordersEntityList = optionalOrdersEntityList.get();
+            ordersDtoList = ordersEntityList.stream().map((entity)->{
+                OrdersDTO ordersDTO = new OrdersDTO();
+                ordersDTO.setOrderAmount(entity.getOrderAmount());
+                ordersDTO.setOrderStatus(entity.getOrderStatus());
+                ordersDTO.setOrderId(entity.getOrderId());
+                ordersDTO.setCity(ordersDTO.getCity());
+                ordersDTO.setEmailId(ordersDTO.getEmailId());
+                return ordersDTO;
+            }).collect(Collectors.toList());
+            return ordersDtoList;
+        } else {
+            return ordersDtoList;
         }
     }
 }
