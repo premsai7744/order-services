@@ -49,8 +49,8 @@ public class OrdersServiceImpl implements OrdersService{
                 ordersDTO.setOrderAmount(entity.getOrderAmount());
                 ordersDTO.setOrderStatus(entity.getOrderStatus());
                 ordersDTO.setOrderId(entity.getOrderId());
-                ordersDTO.setCity(ordersDTO.getCity());
-                ordersDTO.setEmailId(ordersDTO.getEmailId());
+                ordersDTO.setCity(entity.getCity());
+                ordersDTO.setEmailId(entity.getEmailId());
                 return ordersDTO;
             }).collect(Collectors.toList());
             return ordersDtoList;
