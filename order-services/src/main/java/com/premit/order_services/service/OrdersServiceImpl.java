@@ -58,4 +58,24 @@ public class OrdersServiceImpl implements OrdersService{
             return ordersDtoList;
         }
     }
+
+    @Override
+    public List<OrdersDTO> getOrdersByEmailIdAndCity(String emailId, String city) {
+        List<OrdersDTO> ordersDTOList = null;
+        if(ordersRepository.findByEmailIdAndCity(emailId,city).isPresent()) {
+            List<OrdersEntity> ordersEntityList = ordersRepository.findByEmailIdAndCity(emailId,city).get();
+            ordersDTOList = ordersEntityList.stream().map(ordersEntity->new OrdersDTO(
+                    ordersEntity.getOrderId(),
+                    ordersEntity.getOrderStatus(),
+                    ordersEntity.getOrderAmount(),
+                    ordersEntity.getCity(),
+                    ordersEntity.getEmailId()
+                    )).collect(Collectors.toList());
+            return ordersDTOList;
+        } else {
+            return ordersDTOList;
+        }
+    }
+
+
 }

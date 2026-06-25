@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class OrdersServiceController {
@@ -13,15 +14,23 @@ public class OrdersServiceController {
     @Autowired
     OrdersService ordersService;
 
-    @PostMapping(path="/create")
+    @PostMapping(path = "/create")
     public String createOrder(@RequestBody OrdersDTO ordersDTO) {
         String ordersCreationResult = ordersService.createOrder(ordersDTO);
         return ordersCreationResult;
     }
 
-    @GetMapping(path="/status/{status}/email/{emailId}")
+    @GetMapping(path = "/status/{status}/email/{emailId}")
     public List<OrdersDTO> getOrdersByStatusAndEmail(@PathVariable("status") String orderStatus, @PathVariable String emailId) {
-    List<OrdersDTO> retrievedOrdersDTOList = ordersService.getOrdersByStatusAndEmail(orderStatus,emailId);
+        List<OrdersDTO> retrievedOrdersDTOList = ordersService.getOrdersByStatusAndEmail(orderStatus, emailId);
+        return retrievedOrdersDTOList;
+    }
+
+    @GetMapping(path = "/emailId/{emailId}/city/{city}")
+    public List<OrdersDTO> getOrdersByEmailIdAndCity(@PathVariable Map<String, String> values) {
+        String emailId = values.get("emailId");
+        String city = values.get("city");
+        List<OrdersDTO> retrievedOrdersDTOList = ordersService.getOrdersByEmailIdAndCity(emailId, city);
         return retrievedOrdersDTOList;
     }
 }

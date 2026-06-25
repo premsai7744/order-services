@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface OrdersRepository extends JpaRepository<OrdersEntity,Integer> {
     Optional<List<OrdersEntity>> findByOrderStatusAndEmailId(String orderStatus, String emailId);
+    Optional<List<OrdersEntity>> findByEmailIdAndCity(String emailId,String city);
 }
