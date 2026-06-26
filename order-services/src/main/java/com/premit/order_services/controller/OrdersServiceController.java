@@ -2,7 +2,9 @@ package com.premit.order_services.controller;
 
 import com.premit.order_services.DTO.OrdersDTO;
 import com.premit.order_services.service.OrdersService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,5 +34,11 @@ public class OrdersServiceController {
         String city = values.get("city");
         List<OrdersDTO> retrievedOrdersDTOList = ordersService.getOrdersByEmailIdAndCity(emailId, city);
         return retrievedOrdersDTOList;
+    }
+
+    @DeleteMapping(path="/delete/{city}")
+    public int deleteUsersByCity(@PathVariable String city){
+       int deletedUsersByCity = ordersService.deleteUsersByCity(city);
+        return deletedUsersByCity;
     }
 }

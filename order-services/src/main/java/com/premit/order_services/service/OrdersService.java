@@ -8,4 +8,5 @@ public interface OrdersService {
     public String createOrder(OrdersDTO ordersDTO);
     List<OrdersDTO> getOrdersByStatusAndEmail(String orderStatus,String emailId);
     List<OrdersDTO> getOrdersByEmailIdAndCity(String emailId,String city);
+    int deleteUsersByCity(String city);
 }

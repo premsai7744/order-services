@@ -3,6 +3,7 @@ package com.premit.order_services.service;
 import com.premit.order_services.DTO.OrdersDTO;
 import com.premit.order_services.entity.OrdersEntity;
 import com.premit.order_services.repository.OrdersRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +76,13 @@ public class OrdersServiceImpl implements OrdersService{
         } else {
             return ordersDTOList;
         }
+    }
+
+    @Transactional
+    @Override
+    public int deleteUsersByCity(String city) {
+        int deletedByCity = ordersRepository.deleteByCity(city);
+        return deletedByCity;
     }
 
 

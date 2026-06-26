@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface OrdersRepository extends JpaRepository<OrdersEntity,Integer> {
     Optional<List<OrdersEntity>> findByOrderStatusAndEmailId(String orderStatus, String emailId);
     Optional<List<OrdersEntity>> findByEmailIdAndCity(String emailId,String city);
+     int deleteByCity(String city);
 }
+
