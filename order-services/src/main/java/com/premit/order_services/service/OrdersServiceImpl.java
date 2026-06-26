@@ -85,5 +85,12 @@ public class OrdersServiceImpl implements OrdersService{
         return deletedByCity;
     }
 
+    @Transactional
+    @Override
+    public int updateCityByEmailId(String city,String email) {
+        int updated = ordersRepository.updateCityByEmail(city,email);
+        return updated;
+    }
+
 
 }

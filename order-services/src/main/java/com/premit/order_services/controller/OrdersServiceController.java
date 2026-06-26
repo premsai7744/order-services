@@ -41,4 +41,10 @@ public class OrdersServiceController {
        int deletedUsersByCity = ordersService.deleteUsersByCity(city);
         return deletedUsersByCity;
     }
+
+    @PutMapping(path="/update/city/{city}/email/{emailId}")
+    public int updateCityByEmailId(@PathVariable String city,@PathVariable(name="emailId") String email) {
+        int updated = ordersService.updateCityByEmailId(city,email);
+        return updated;
+    }
 }
