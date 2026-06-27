@@ -92,5 +92,26 @@ public class OrdersServiceImpl implements OrdersService{
         return updated;
     }
 
+    @Override
+    public List<OrdersDTO> getOrdersByEmail(String email) {
+        List<OrdersDTO> ordersDTOList = null;
+        Optional<List<OrdersEntity>> optionalOrdersEntityList = ordersRepository.findByEmailId(email);
+        if(optionalOrdersEntityList.isPresent()) {
+            List<OrdersEntity> ordersEntityList = optionalOrdersEntityList.get();
+            ordersDTOList= ordersEntityList.stream().map(ordersEntity -> {
+                OrdersDTO ordersDTO = new OrdersDTO();
+                ordersDTO.setOrderAmount(ordersEntity.getOrderAmount());
+                ordersDTO.setOrderStatus(ordersEntity.getOrderStatus());
+                ordersDTO.setCity(ordersEntity.getCity());
+                ordersDTO.setOrderId(ordersEntity.getOrderId());
+                ordersDTO.setEmailId(ordersEntity.getEmailId());
+                return ordersDTO;
+            }).collect(Collectors.toList());
+            return ordersDTOList;
+        } else {
+           return ordersDTOList;
+        }
+    }
+
 
 }

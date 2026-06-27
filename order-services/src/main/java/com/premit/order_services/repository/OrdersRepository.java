@@ -19,5 +19,7 @@ public interface OrdersRepository extends JpaRepository<OrdersEntity,Integer> {
      @Modifying
      @Query(value = "UPDATE ordrs SET city = :cityName WHERE email_id = :email",nativeQuery = true)
      int updateCityByEmail(@Param("cityName") String city, @Param("email") String email);
+
+     Optional<List<OrdersEntity>> findByEmailId(String email);
 }
 

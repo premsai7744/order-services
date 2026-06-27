@@ -10,4 +10,5 @@ public interface OrdersService {
     List<OrdersDTO> getOrdersByEmailIdAndCity(String emailId,String city);
     int deleteUsersByCity(String city);
     int updateCityByEmailId(String city, String email);
+    List<OrdersDTO> getOrdersByEmail(String email);
 }
