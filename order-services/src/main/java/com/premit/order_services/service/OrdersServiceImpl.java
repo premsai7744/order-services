@@ -113,5 +113,12 @@ public class OrdersServiceImpl implements OrdersService{
         }
     }
 
+    @Override
+    public List<String> getOrderStatusByIds(List<Integer> id) {
+       List<OrdersEntity> allOrders = ordersRepository.findAllById(id);
+       List<String> ordersStatus = allOrders.stream().map(entity->entity.getOrderStatus()).collect(Collectors.toList());
+       return ordersStatus;
+    }
+
 
 }

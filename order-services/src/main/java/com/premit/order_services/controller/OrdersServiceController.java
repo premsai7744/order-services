@@ -60,4 +60,23 @@ public class OrdersServiceController {
            return retrievedOrdersDTOListByEmail;
        }
     }
+
+    @GetMapping("/order/status/id")
+    public List<String> getOrderStatusByIds(@RequestParam List<Integer> id) {
+        List<String> retrievedOrdersStatus = ordersService.getOrderStatusByIds(id);
+        return retrievedOrdersStatus;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
