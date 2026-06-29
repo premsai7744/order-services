@@ -70,6 +70,12 @@ public class OrdersServiceController {
         List<OrdersDTO> retrievedOrders = ordersService.getOrdersByCity(city);
         return retrievedOrders;
     }
+
+    @GetMapping("/orders/filters")
+    public List<OrdersDTO> getOrdersByFilters(@RequestParam Map<String,String> values) {
+        List<OrdersDTO> ordersDTOList = ordersService.getOrdersByFilters(values);
+        return ordersDTOList;
+    }
 }
 
 

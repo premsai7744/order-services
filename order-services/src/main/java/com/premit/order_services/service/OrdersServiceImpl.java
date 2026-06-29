@@ -4,11 +4,13 @@ import com.premit.order_services.DTO.OrdersDTO;
 import com.premit.order_services.entity.OrdersEntity;
 import com.premit.order_services.repository.OrdersRepository;
 import jakarta.transaction.Transactional;
+import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -139,5 +141,37 @@ public class OrdersServiceImpl implements OrdersService{
             return ordersDTO;
         }).collect(Collectors.toList());
         return allOrdersDTOS;
+    }
+
+    @Override
+    public List<OrdersDTO> getOrdersByFilters(Map<String, String> values) {
+
+        Specification<OrdersEntity> specification = null;
+
+        for(Map.Entry<String,String> entry : values.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            Specification<OrdersEntity> spec =
+                    (root,query,cb)->
+                            cb.equal(root.get(key),value);
+            if(specification==null){
+                specification = spec;
+            } else {
+                specification = specification.and(spec);
+            }
+        }
+           List<OrdersEntity> ordersEntityList = ordersRepository.findAll(specification);
+
+           List<OrdersDTO> ordersDTOList = ordersEntityList.stream().map(entity->{
+               OrdersDTO dto = new OrdersDTO();
+               dto.setOrderId(entity.getOrderId());
+               dto.setOrderStatus(entity.getOrderStatus());
+               dto.setCity(entity.getCity());
+               dto.setOrderAmount(entity.getOrderAmount());
+               dto.setEmailId(entity.getEmailId());
+               return dto;
+           }).collect(Collectors.toList());
+        return ordersDTOList;
     }
 }
