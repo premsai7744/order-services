@@ -12,5 +12,5 @@ public interface OrdersService {
     int updateCityByEmailId(String city, String email);
     List<OrdersDTO> getOrdersByEmail(String email);
     List<String> getOrderStatusByIds(List<Integer> id);
-
+    List<OrdersDTO> getOrdersByCity(String city);
 }

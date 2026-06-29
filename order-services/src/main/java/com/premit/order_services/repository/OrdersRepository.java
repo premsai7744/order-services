@@ -2,6 +2,7 @@ package com.premit.order_services.repository;
 
 import com.premit.order_services.entity.OrdersEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface OrdersRepository extends JpaRepository<OrdersEntity,Integer> {
+public interface OrdersRepository extends JpaRepository<OrdersEntity,Integer>, JpaSpecificationExecutor<OrdersEntity> {
     Optional<List<OrdersEntity>> findByOrderStatusAndEmailId(String orderStatus, String emailId);
     Optional<List<OrdersEntity>> findByEmailIdAndCity(String emailId,String city);
      int deleteByCity(String city);

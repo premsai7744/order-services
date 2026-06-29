@@ -1,11 +1,9 @@
 package com.premit.order_services.controller;
 
 import com.premit.order_services.DTO.OrdersDTO;
-import com.premit.order_services.entity.OrdersEntity;
 import com.premit.order_services.service.OrdersService;
-import jakarta.transaction.Transactional;
+import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,6 +63,12 @@ public class OrdersServiceController {
     public List<String> getOrderStatusByIds(@RequestParam List<Integer> id) {
         List<String> retrievedOrdersStatus = ordersService.getOrderStatusByIds(id);
         return retrievedOrdersStatus;
+    }
+
+    @GetMapping("/orders/city/{cityName}")
+    public List<OrdersDTO> getOrdersByCity(@PathVariable(name="cityName") String city) {
+        List<OrdersDTO> retrievedOrders = ordersService.getOrdersByCity(city);
+        return retrievedOrders;
     }
 }
 

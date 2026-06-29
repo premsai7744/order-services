@@ -5,6 +5,7 @@ import com.premit.order_services.entity.OrdersEntity;
 import com.premit.order_services.repository.OrdersRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -120,5 +121,23 @@ public class OrdersServiceImpl implements OrdersService{
        return ordersStatus;
     }
 
+    @Override
+    public List<OrdersDTO> getOrdersByCity(String city) {
 
+        Specification<OrdersEntity> citySpecification =
+                (root,query,cb)->
+                        cb.equal(root.get("city"),city);
+        List<OrdersEntity> ordersEntityList = ordersRepository.findAll(citySpecification);
+
+        List<OrdersDTO> allOrdersDTOS = ordersEntityList.stream().map(entity->{
+            OrdersDTO ordersDTO = new OrdersDTO();
+            ordersDTO.setEmailId(entity.getEmailId());
+            ordersDTO.setOrderAmount(entity.getOrderAmount());
+            ordersDTO.setCity(entity.getCity());
+            ordersDTO.setOrderStatus(entity.getOrderStatus());
+            ordersDTO.setOrderId(entity.getOrderId());
+            return ordersDTO;
+        }).collect(Collectors.toList());
+        return allOrdersDTOS;
+    }
 }
