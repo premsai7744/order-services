@@ -4,6 +4,8 @@ import com.premit.order_services.DTO.OrdersDTO;
 import com.premit.order_services.service.OrdersService;
 import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,15 +18,22 @@ public class OrdersServiceController {
     OrdersService ordersService;
 
     @PostMapping(path = "/create")
-    public String createOrder(@RequestBody OrdersDTO ordersDTO) {
+    public ResponseEntity<String> createOrder(@RequestBody OrdersDTO ordersDTO) {
         String ordersCreationResult = ordersService.createOrder(ordersDTO);
-        return ordersCreationResult;
+        if(ordersCreationResult.equals("Order created successfully.")){
+            return new ResponseEntity<>(ordersCreationResult, HttpStatusCode.valueOf(201));
+        } else {
+            return new ResponseEntity<>(ordersCreationResult,HttpStatusCode.valueOf(409));
+        }
     }
 
     @GetMapping(path = "/status/{status}/email/{emailId}")
-    public List<OrdersDTO> getOrdersByStatusAndEmail(@PathVariable("status") String orderStatus, @PathVariable String emailId) {
+    public ResponseEntity<List<OrdersDTO>> getOrdersByStatusAndEmail(@PathVariable("status") String orderStatus, @PathVariable String emailId) {
         List<OrdersDTO> retrievedOrdersDTOList = ordersService.getOrdersByStatusAndEmail(orderStatus, emailId);
-        return retrievedOrdersDTOList;
+        if(retrievedOrdersDTOList!=null) {
+            return new ResponseEntity<>(retrievedOrdersDTOList,HttpStatusCode.valueOf(200));
+        }
+        return new ResponseEntity<>(retrievedOrdersDTOList,HttpStatusCode.valueOf(200));
     }
 
     @GetMapping(path = "/emailId/{emailId}/city/{city}")
@@ -36,26 +45,42 @@ public class OrdersServiceController {
     }
 
     @DeleteMapping(path="/delete/{city}")
-    public int deleteUsersByCity(@PathVariable String city){
+    public ResponseEntity<Integer> deleteUsersByCity(@PathVariable String city){
        int deletedUsersByCity = ordersService.deleteUsersByCity(city);
-        return deletedUsersByCity;
+        if(deletedUsersByCity==0){
+            return new ResponseEntity<>(deletedUsersByCity,HttpStatusCode.valueOf(404));
+        } else{
+            return new ResponseEntity<>(deletedUsersByCity,HttpStatusCode.valueOf(200));
+        }
     }
 
     @PutMapping(path="/update/city/{city}/email/{emailId}")
-    public int updateCityByEmailId(@PathVariable String city,@PathVariable(name="emailId") String email) {
+    public ResponseEntity<Integer> updateCityByEmailId(@PathVariable String city,@PathVariable(name="emailId") String email) {
         int updated = ordersService.updateCityByEmailId(city,email);
-        return updated;
+        if(updated==0){
+            return new ResponseEntity<>(updated,HttpStatusCode.valueOf(404));
+        } else{
+            return new ResponseEntity<>(updated,HttpStatusCode.valueOf(200));
+        }
     }
 
     @GetMapping(path="/get/orders/email/{emailId}")
-    public List<OrdersDTO> getOrdersBasedOnEmailId(@PathVariable(name="emailId") String email,
+    public ResponseEntity<List<OrdersDTO>> getOrdersBasedOnEmailId(@PathVariable(name="emailId") String email,
                                                       @RequestParam(name = "cityName",required = false) String city) {
        if(email!=null && city!=null) {
            List<OrdersDTO> retrievedOrdersDTOListByEmailAndCity = ordersService.getOrdersByEmailIdAndCity(email, city);
-           return retrievedOrdersDTOListByEmailAndCity;
+           if(retrievedOrdersDTOListByEmailAndCity!=null){
+               return new ResponseEntity<>(retrievedOrdersDTOListByEmailAndCity,HttpStatusCode.valueOf(200));
+           } else {
+               return new ResponseEntity<>(retrievedOrdersDTOListByEmailAndCity,HttpStatusCode.valueOf(204));
+           }
        } else {
            List<OrdersDTO> retrievedOrdersDTOListByEmail = ordersService.getOrdersByEmail(email);
-           return retrievedOrdersDTOListByEmail;
+           if(retrievedOrdersDTOListByEmail!=null){
+               return new ResponseEntity<>(retrievedOrdersDTOListByEmail,HttpStatusCode.valueOf(200));
+           } else {
+               return new ResponseEntity<>(retrievedOrdersDTOListByEmail,HttpStatusCode.valueOf(404));
+           }
        }
     }
 
@@ -66,9 +91,13 @@ public class OrdersServiceController {
     }
 
     @GetMapping("/orders/city/{cityName}")
-    public List<OrdersDTO> getOrdersByCity(@PathVariable(name="cityName") String city) {
+    public ResponseEntity<List<OrdersDTO>> getOrdersByCity(@PathVariable(name="cityName") String city) {
         List<OrdersDTO> retrievedOrders = ordersService.getOrdersByCity(city);
-        return retrievedOrders;
+        if(retrievedOrders!=null){
+            return new ResponseEntity<>(retrievedOrders,HttpStatusCode.valueOf(200));
+        } else {
+            return new ResponseEntity<>(retrievedOrders,HttpStatusCode.valueOf(404));
+        }
     }
 
     @GetMapping("/orders/filters")
